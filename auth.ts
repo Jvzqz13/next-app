@@ -2,15 +2,46 @@ import NextAuth from "next-auth";
 import GoogleProvider from 'next-auth/providers/google';
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
+import CredentialsProvider from 'next-auth/providers/credentials'
+import bcrypt from  'bcryptjs'
 
 const prisma = new PrismaClient();
 
 export const { handlers:{GET, POST }, auth, signIn, signOut } = NextAuth({
+        // Connects to Prisma 
         adapter:PrismaAdapter(prisma),
-        providers:[GoogleProvider({
+
+        // Array of providers 
+        providers:[
+            // User creates login info
+            CredentialsProvider({
+                name: 'credentials', 
+                credentials: {
+                    email: { label: 'Email', type: 'email', placeholder: 'Email' },
+                    password: { label: 'Password', type: 'password', placeholder: 'Password' }
+                },
+                async authorize(credentials, req) {
+                    if (!credentials?.email || !credentials.password ) 
+                        return null
+                    const user = await prisma.user.findUnique({
+                        where: { 
+                            email: credentials.email as string 
+                        }})
+                    if(!user) 
+                        return null
+                    const macthedPasswords = await bcrypt.compare(
+                        credentials.password as string, 
+                        user.hashPassword!
+                        )
+                    return macthedPasswords ? user : null;
+                    
+                }
+            }),
+            // Uses Google to signin/register 
+            GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        })
+            })
         ],
         callbacks:{
             authorized({request, auth}){
