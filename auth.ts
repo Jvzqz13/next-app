@@ -4,6 +4,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from  'bcryptjs'
+import github from "next-auth/providers/github";
 
 const prisma = new PrismaClient();
 
@@ -41,7 +42,13 @@ export const { handlers:{GET, POST }, auth, signIn, signOut } = NextAuth({
             GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            }),
+            //GitHub Auth
+            github({
+                clientId: process.env.AUTH_GITHUB_ID,
+                clientSecret: process.env.AUTH_GITHUB_SECRET
             })
+
         ],
         callbacks:{
             authorized({request, auth}){
