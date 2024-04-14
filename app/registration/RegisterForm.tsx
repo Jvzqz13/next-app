@@ -1,8 +1,8 @@
 'use client'
-import React, { ChangeEvent } from 'react'
+import axios from 'axios'
+import React, { ChangeEvent, FormEvent, useState } from 'react'
 
-// import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 interface User{
   name: string,
@@ -11,7 +11,7 @@ interface User{
 }
 
 const RegisterForm = () => {
-  // const router = useRouter();
+  const router = useRouter();
 
   const [ formData, setFormData ] = useState<User> ({
     name: "",
@@ -19,17 +19,41 @@ const RegisterForm = () => {
     password:""
   })
 
+    // updates formData state based on the changes from the input fields   
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    // takes prevState and returns new state object 
     setFormData (prevState => ({ 
       ...prevState,
       [name]: value
     }))
   }  
    
-  const handleSubmit = (e: any) => { 
+  const handleSubmit = async (e: FormEvent<HTMLElement> ) => { 
     e.preventDefault();
-    console.log(formData);
+    console.log('Register',formData)
+
+    try {
+      const response = await axios.post('http://localhost:3000/api/register', formData)
+      console.log('Registration Successful');
+      // redirect user to home page
+      console.log(response);
+      
+      if ( response.status === 201 ) {
+        router.push('http://localhost:3000/api/auth/signin')
+      }
+
+      setFormData({
+        name:"",
+        email:"",
+        password:""
+      })
+      
+      
+    } catch (error) {
+      console.error(' Error Registering', error)
+    }
+
   }
  
   return (

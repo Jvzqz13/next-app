@@ -33,5 +33,5 @@ export async function POST (request: NextRequest){
             hashPassword
         }
     });
-    return NextResponse.json({email: newUser.email})
+    return NextResponse.json({email: newUser.email}, {status: 201})
 }
