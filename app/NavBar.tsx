@@ -15,6 +15,7 @@ const NavBar = () => {
           <div> 
             { session.user!.name } 
             <Link href='/api/auth/signout' className='ml-3'> Sign Out </Link>
+            <Link href='/reset-password' > Reset Password </Link>
           </div> 
           }
       { status === 'unauthenticated' && <Link href="/api/auth/signin"> Login </Link>}

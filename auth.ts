@@ -55,7 +55,8 @@ export const { handlers:{GET, POST }, auth, signIn, signOut } = NextAuth({
                 const { pathname } = request.nextUrl
                 if (
                     pathname.startsWith('/users') ||
-                    pathname.startsWith('/products')
+                    pathname.startsWith('/products') ||
+                    pathname.startsWith('/reset-password')
                     )
                 return !!auth; 
             return true
