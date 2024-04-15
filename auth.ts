@@ -51,6 +51,7 @@ export const { handlers:{GET, POST }, auth, signIn, signOut } = NextAuth({
 
         ],
         callbacks:{
+            // Protects pages from unAuth Users - used with middleware.tsx
             authorized({request, auth}){
                 const { pathname } = request.nextUrl
                 if (
