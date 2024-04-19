@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import NavBar from './NavBar'
 
 import { SessionProvider } from 'next-auth/react'
+import GoogleAnalyicsScript from './GoogleAnalyicsScript'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,6 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" data-theme="winter">
+      <GoogleAnalyicsScript />
       <body className={inter.className}>
 
         <SessionProvider>
