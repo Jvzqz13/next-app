@@ -3,6 +3,7 @@ import Link from 'next/link'
 import ProductCard from './components/ProductCard'
 import { auth } from '../auth'
 import img from '@/public/images/a1611060986_65.jpeg'
+import { Metadata } from 'next'
 
 
 
@@ -36,3 +37,19 @@ export default async function Home() {
   )
 
 }
+
+// // creating metadata manuelly 
+// export const metadata: Metadata = {
+//   title:'Home Page',
+//   description: 'Home page s'
+// }
+
+// // creatin metadata dynamicly 
+// export async function generateMetadata(): Promise<Metadata> {
+//   const product = await fetch ('')
+
+//   return {
+//     title:'product.title',
+//     description: 'product.description'
+//   }
+// }
